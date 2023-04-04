@@ -28,9 +28,15 @@ const HeroesAddForm = () => {
     const hero = { name, description: power, element, id: uuidv4() };
     dispatch(heroesAddNew(hero));
 
-    request("http://localhost:3001/heroes/", "POST", JSON.stringify(hero))
-      .then(setName(""), setPower(""), setElement(""))
-      .catch((error) => console.log(error));
+    request(
+      "http://localhost:3001/heroes/",
+      "POST",
+      JSON.stringify(hero)
+    ).catch((error) => console.log(error));
+
+    setName("");
+    setPower("");
+    setElement("");
   };
 
   // const names = (value) => {
@@ -53,7 +59,7 @@ const HeroesAddForm = () => {
         return;
       }
       return (
-        <option key={item} value={item}>
+        <option key={item.name} value={item.name}>
           {item.label}
         </option>
       );
@@ -61,7 +67,10 @@ const HeroesAddForm = () => {
   };
   const filter = renderFilters(filters);
   return (
-    <form className="border p-4 shadow-lg rounded">
+    <form
+      className="border p-4 shadow-lg rounded"
+      onSubmit={(e) => addNewHero(e)}
+    >
       <div className="mb-3">
         <label htmlFor="name" className="form-label fs-4">
           Имя нового героя
@@ -103,7 +112,7 @@ const HeroesAddForm = () => {
           className="form-select"
           id="element"
           name="element"
-          value={element}
+          // value={element}
           onChange={(e) => setElement(e.target.value)}
         >
           <option>Я владею элементом...</option>
@@ -111,11 +120,7 @@ const HeroesAddForm = () => {
         </select>
       </div>
 
-      <button
-        type="submit"
-        onClick={(e) => addNewHero(e)}
-        className="btn btn-primary"
-      >
+      <button type="submit" className="btn btn-primary">
         Создать
       </button>
     </form>

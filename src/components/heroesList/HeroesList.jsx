@@ -11,6 +11,7 @@ import {
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
 import { useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 
 // Задача для этого компонента:
 // При клике на "крестик" идет удаление персонажа из общего состояния
@@ -71,7 +72,11 @@ const HeroesList = () => {
   };
   const filterData = filteredData(heroes, activeFilter);
   const elements = renderHeroesList(filterData);
-  return <ul>{elements}</ul>;
+  return (
+    <ul>
+      <AnimatePresence>{elements}</AnimatePresence>
+    </ul>
+  );
 };
 
 export default HeroesList;

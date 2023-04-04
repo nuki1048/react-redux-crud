@@ -10,7 +10,6 @@ export const useHttp = () => {
       body = null,
       headers = {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       }
     ) => {
       // setProcess('loading');
