@@ -1,0 +1,32 @@
+{
+  "heroes": [
+    {
+      "name": "Magic",
+      "description": "Hi there",
+      "element": "fire",
+      "id": "12721efe-f67f-43a9-ac81-6dcacbfc5d33"
+    }
+  ],
+  "filters": [
+    {
+      "name": "all",
+      "label": "Все"
+    },
+    {
+      "name": "fire",
+      "label": "Огонь"
+    },
+    {
+      "name": "water",
+      "label": "Вода"
+    },
+    {
+      "name": "wind",
+      "label": "Ветер"
+    },
+    {
+      "name": "earth",
+      "label": "Земля"
+    }
+  ]
+}
