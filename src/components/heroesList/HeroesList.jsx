@@ -2,16 +2,13 @@ import { useHttp } from "../../hooks/http.hook";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  heroesFetching,
-  heroesFetched,
-  heroesFetchingError,
-  heroesRemove,
-} from "../../actions";
+import { fetchHeroes, heroesRemove } from "../../actions";
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
 import { useCallback } from "react";
+
 import { AnimatePresence } from "framer-motion";
+import { createSelector } from "reselect";
 
 // Задача для этого компонента:
 // При клике на "крестик" идет удаление персонажа из общего состояния
@@ -19,18 +16,24 @@ import { AnimatePresence } from "framer-motion";
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-  const { heroes, heroesLoadingStatus, activeFilter } = useSelector(
-    (state) => state
+  const filteredHeroesSelector = createSelector(
+    (state) => state.filters.activeFilter,
+    (state) => state.heroes.heroes,
+    (filter, heroes) =>
+      filter === "all"
+        ? heroes
+        : heroes.filter((item) => item.element === filter)
   );
+
+  const heroesLoadingStatus = useSelector(
+    (state) => state.heroes.heroesLoadingStatus
+  );
+  const filteredHeroes = useSelector(filteredHeroesSelector);
   const dispatch = useDispatch();
   const { request } = useHttp();
 
   useEffect(() => {
-    dispatch(heroesFetching());
-    request("http://localhost:3001/heroes/")
-      .then((data) => dispatch(heroesFetched(data)))
-      .catch(() => dispatch(heroesFetchingError()));
-
+    dispatch(fetchHeroes(request));
     // eslint-disable-next-line
   }, []);
   const onRemoveItem = useCallback(
@@ -66,12 +69,7 @@ const HeroesList = () => {
     });
   };
 
-  const filteredData = (arr, filter) => {
-    if (!filter || filter === "all") return arr;
-    return arr.filter((item) => item.element === filter);
-  };
-  const filterData = filteredData(heroes, activeFilter);
-  const elements = renderHeroesList(filterData);
+  const elements = renderHeroesList(filteredHeroes);
   return (
     <ul>
       <AnimatePresence>{elements}</AnimatePresence>

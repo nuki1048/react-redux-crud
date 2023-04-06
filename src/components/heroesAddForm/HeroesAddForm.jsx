@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { heroesAddNew } from "../../actions";
 
 const HeroesAddForm = () => {
-  const { filters } = useSelector((state) => state);
+  const { filters } = useSelector((state) => state.filters);
   const [name, setName] = useState("");
   const [power, setPower] = useState("");
   const [element, setElement] = useState("");
@@ -27,7 +27,6 @@ const HeroesAddForm = () => {
     event.preventDefault();
     const hero = { name, description: power, element, id: uuidv4() };
     dispatch(heroesAddNew(hero));
-
     request(
       "http://localhost:3001/heroes/",
       "POST",

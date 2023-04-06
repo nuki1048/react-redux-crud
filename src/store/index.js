@@ -1,6 +1,23 @@
-import { createStore } from 'redux';
-import reducer from '../reducers';
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import heroes from "../reducers/heroes";
+import filters from "../reducers/filters";
+import ReduxThunk from "redux-thunk";
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const stringMiddleware = () => (next) => (action) => {
+  if (typeof action === "string") {
+    return next({ type: action });
+  }
+
+  return next(action);
+};
+
+const rootReducer = combineReducers({ heroes, filters });
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(ReduxThunk, stringMiddleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
+);
 
 export default store;

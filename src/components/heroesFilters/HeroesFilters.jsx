@@ -8,26 +8,21 @@
 import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  filtersFetched,
-  filtersFetching,
-  filtersFetchingError,
-  heroesSetFilter,
-} from "../../actions";
+import { heroesSetFilter, fetchFilters } from "../../actions";
 import Spinner from "../spinner/Spinner";
+import { createSelector } from "reselect";
 import { useHttp } from "../../hooks/http.hook";
 import HeroesFiltersBtn from "../heroesFiltersBtn/HeroesFiltersBtn";
 
 const HeroesFilters = () => {
   const dispatch = useDispatch();
   const { request } = useHttp();
-  const { filtersLoadingStatus, filters } = useSelector((state) => state);
+  const { filtersLoadingStatus, filters } = useSelector(
+    (state) => state.filters
+  );
 
   useEffect(() => {
-    dispatch(filtersFetching());
-    request("http://localhost:3001/filters")
-      .then((data) => dispatch(filtersFetched(data)))
-      .catch(() => dispatch(filtersFetchingError()));
+    dispatch(fetchFilters(request));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
