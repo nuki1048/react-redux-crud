@@ -1,22 +1,16 @@
 /* eslint-disable array-callback-return */
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
+
 import { v4 as uuidv4 } from "uuid";
 
 import { useState } from "react";
 import { useHttp } from "../../hooks/http.hook";
-import { useDispatch, useSelector } from "react-redux";
-import { heroesAddNew } from "../../actions";
+import { useDispatch } from "react-redux";
+import { heroesAddNew } from "../heroesList/heroesSlice";
+import { filtersSelector } from "../heroesFilters/filtersSlice";
+import store from "../../store";
 
 const HeroesAddForm = () => {
-  const { filters } = useSelector((state) => state.filters);
+  const filters = filtersSelector.selectAll(store.getState());
   const [name, setName] = useState("");
   const [power, setPower] = useState("");
   const [element, setElement] = useState("");
@@ -38,20 +32,6 @@ const HeroesAddForm = () => {
     setElement("");
   };
 
-  // const names = (value) => {
-  //   switch (value) {
-  //     case "fire":
-  //       return "Огонь";
-  //     case "water":
-  //       return "Вода";
-  //     case "wind":
-  //       return "Ветер";
-  //     case "earth":
-  //       return "Земля";
-  //     default:
-  //       return "0";
-  //   }
-  // };
   const renderFilters = (arr) => {
     return arr?.map((item) => {
       if (item === "all") {

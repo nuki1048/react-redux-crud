@@ -16,23 +16,28 @@
   "filters": [
     {
       "name": "all",
-      "label": "Все"
+      "label": "Все",
+      "id": "0"
     },
     {
       "name": "fire",
-      "label": "Огонь"
+      "label": "Огонь",
+      "id": "1"
     },
     {
       "name": "water",
-      "label": "Вода"
+      "label": "Вода",
+      "id": "2"
     },
     {
       "name": "wind",
-      "label": "Ветер"
+      "label": "Ветер",
+      "id": "3"
     },
     {
       "name": "earth",
-      "label": "Земля"
+      "label": "Земля",
+      "id": "4"
     }
   ]
 }
