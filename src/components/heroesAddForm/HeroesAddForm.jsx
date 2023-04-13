@@ -3,30 +3,21 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { useState } from "react";
-import { useHttp } from "../../hooks/http.hook";
-import { useDispatch } from "react-redux";
-import { heroesAddNew } from "../heroesList/heroesSlice";
-import { filtersSelector } from "../heroesFilters/filtersSlice";
-import store from "../../store";
-
+import { useCreateHeroMutation, useGetFiltersQuery } from "../../api/apiSlice";
+import Spinner from "../spinner/Spinner";
 const HeroesAddForm = () => {
-  const filters = filtersSelector.selectAll(store.getState());
+  const [createHero, { isLoading }] = useCreateHeroMutation();
+
+  const { data: filters } = useGetFiltersQuery();
   const [name, setName] = useState("");
   const [power, setPower] = useState("");
   const [element, setElement] = useState("");
-  const { request } = useHttp();
-  const dispatch = useDispatch();
 
   const addNewHero = (event) => {
     event.preventDefault();
     const hero = { name, description: power, element, id: uuidv4() };
-    dispatch(heroesAddNew(hero));
-    request(
-      "http://localhost:3001/heroes/",
-      "POST",
-      JSON.stringify(hero)
-    ).catch((error) => console.log(error));
 
+    createHero(hero).unwrap();
     setName("");
     setPower("");
     setElement("");
@@ -44,6 +35,13 @@ const HeroesAddForm = () => {
       );
     });
   };
+
+  if (isLoading)
+    return (
+      <form className="border p-4 shadow-lg rounded">
+        <Spinner />
+      </form>
+    );
   const filter = renderFilters(filters);
   return (
     <form
